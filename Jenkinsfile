@@ -2,8 +2,7 @@ pipeline {
   agent {
     docker {
       alwaysPull true
-      registryCredentialsId 'dockerhub-credentials'
-    }
+    registryCredentialsId 'dockerhub-credentials'
   }
     registryCredentialsId 'dockerhub-credentials'
   }
