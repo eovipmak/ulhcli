@@ -31,59 +31,56 @@ pipeline {
       steps {
         echo 'Setting up Nginx container...'
         sh '''
-            docker run --name nginx --network my_network -v wordpress_data:/usr/share/nginx/html -v /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx:latest
-          '''
-          echo 'Creating Nginx configuration file...'
-          sh '''
-            cat <<EOF > /tmp/wordpress.conf
-            server {
-              listen 80;
-              server_name localhost;
-  
-              root /usr/share/nginx/html/wordpress;
-              index index.php index.html index.htm;
-  
-              location / {
-                try_files "$uri" "$uri/" /index.php?$args;
-              }
-  
-              location ~ \\.php$ {
-                include fastcgi_params;
-                fastcgi_pass wordpress:80;
-                fastcgi_index index.php;
-                fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
-              }
-  
-              location ~ /\\.ht {
-                deny all;
-              }
+          docker run --name nginx --network my_network -v wordpress_data:/usr/share/nginx/html -v /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx:latest
+        '''
+        echo 'Creating Nginx configuration file...'
+        sh '''
+          cat <<EOF > /tmp/wordpress.conf
+          server {
+            listen 80;
+            server_name localhost;
+
+            root /usr/share/nginx/html/wordpress;
+            index index.php index.html index.htm;
+
+            location / {
+              try_files "$uri" "$uri/" /index.php?$args;
             }
-            EOF
-          '''
-          sh 'docker cp /tmp/wordpress.conf nginx:/etc/nginx/conf.d/'
-          sh 'docker exec nginx nginx -t && docker exec nginx nginx -s reload'
-        }
+
+            location ~ \\.php$ {
+              include fastcgi_params;
+              fastcgi_pass wordpress:80;
+              fastcgi_index index.php;
+              fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
+            }
+
+            location ~ /\\.ht {
+              deny all;
+            }
+          }
+          EOF
+        '''
+        sh 'docker cp /tmp/wordpress.conf nginx:/etc/nginx/conf.d/'
+        sh 'docker exec nginx nginx -t && docker exec nginx nginx -s reload'
       }
     }
-    post {
-      def email = 'tt7887418@gmail.com'
-      success {
-        emailext (
-          to: email,
-          subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-          body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-          mimeType: 'text/html'
-        )
-      }
-        // Send an email notification when the job fails to notify the team
-        // Send an email notification when the job fails
-        emailext (
-          to: email,
-          subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-          body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-          mimeType: 'text/html'
-        )
-      }
+  }
+  post {
+    success {
+      emailext (
+        to: 'tt7887418@gmail.com',
+        subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+        body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+        mimeType: 'text/html'
+      )
+    }
+    failure {
+      emailext (
+        to: 'tt7887418@gmail.com',
+        subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+        body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+        mimeType: 'text/html'
+      )
     }
   }
 }
