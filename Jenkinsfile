@@ -1,14 +1,17 @@
 pipeline {
   agent {
     docker {
-      image 'debian:bookworms-slim'
+      image 'debian:bookworm-slim'
     }
 
   }
   stages {
-    stage('') {
+    stage('Start') {
       steps {
-        dir(path: '/root')
+        dir(path: '/root') {
+          // Add steps to execute within the directory
+          sh 'echo "Running inside /root directory"'
+        }
       }
     }
 
