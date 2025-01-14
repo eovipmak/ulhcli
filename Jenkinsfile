@@ -66,8 +66,8 @@ pipeline {
           root /usr/share/nginx/html/wordpress;
           index index.php index.html index.htm;
 
-          try_files $uri $uri/ /index.php?$args;
-          try_files "$uri" "$uri/" /index.php?$args;
+          try_files \$uri \$uri/ /index.php?\$args;
+          try_files "\$uri" "\$uri/" /index.php?\$args;
 
           include fastcgi_params;
           fastcgi_pass wordpress:80;
