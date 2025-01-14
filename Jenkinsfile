@@ -54,39 +54,39 @@ pipeline {
     }
     stage('Setup Nginx Container') {
       steps {
-        echo 'Setting up Nginx container...'
-        script {
-          try {
-            sh '''
-              cat <<EOF > /tmp/wordpress.conf
-              server {
-                listen 80;
-                server_name localhost;
+      echo 'Setting up Nginx container...'
+      script {
+        try {
+        sh '''
+          cat <<EOF > /tmp/wordpress.conf
+          server {
+          listen 80;
+          server_name localhost;
 
-                root /usr/share/nginx/html/wordpress;
-                index index.php index.html index.htm;
+          root /usr/share/nginx/html/wordpress;
+          index index.php index.html index.htm;
 
-                try_files $uri $uri/ /index.php?$args;
-                try_files "$uri" "$uri/" /index.php?$args;
+          try_files $uri $uri/ /index.php?$args;
+          try_files "$uri" "$uri/" /index.php?$args;
 
-                include fastcgi_params;
-                fastcgi_pass wordpress:80;
-                fastcgi_index index.php;
-                fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
-                  
-                location ~ /\\.ht {
-                  deny all;
-                }
-              }
-              EOF
-            '''
-            sh "docker run --name ${NGINX_CONTAINER} --network ${NETWORK_NAME} -v /tmp/wordpress.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:latest"
-            sh "sleep 10 && docker exec ${NGINX_CONTAINER} nginx -t && docker exec ${NGINX_CONTAINER} nginx -s reload"
-          } catch (Exception e) {
-            echo "Nginx container setup failed: ${e}"
-            error "Stopping pipeline due to Nginx container setup failure."
+          include fastcgi_params;
+          fastcgi_pass wordpress:80;
+          fastcgi_index index.php;
+          fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
+            
+          location ~ /\\.ht {
+            deny all;
           }
+          }
+          EOF
+        '''
+        sh "docker run --name ${NGINX_CONTAINER} --network ${NETWORK_NAME} -v /tmp/wordpress.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:latest"
+        sh "sleep 10 && docker exec ${NGINX_CONTAINER} nginx -t && docker exec ${NGINX_CONTAINER} nginx -s reload"
+        } catch (Exception e) {
+        echo "Nginx container setup failed: ${e}"
+        error "Stopping pipeline due to Nginx container setup failure."
         }
+      }
       }
     }
   }
