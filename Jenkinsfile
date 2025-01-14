@@ -72,7 +72,7 @@ pipeline {
           include fastcgi_params;
           fastcgi_pass wordpress:80;
           fastcgi_index index.php;
-          fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
+          fastcgi_param SCRIPT_FILENAME '\$document_root\$fastcgi_script_name';
             
           location ~ /\\.ht {
             deny all;
