@@ -42,14 +42,14 @@ pipeline {
               try_files $uri $uri/ /index.php?$args;
             }
 
-            location ~ \\.php\$ {
+            location ~ \\\\.php\\$ {
               include fastcgi_params;
               fastcgi_pass wordpress:9000;
               fastcgi_index index.php;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             }
 
-            location ~ /\.ht {
+            location ~ /\\.ht {
               deny all;
             }
           }
