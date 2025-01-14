@@ -1,15 +1,12 @@
 pipeline {
   agent {
-    docker {
-      alwaysPull true
-      registryCredentialsId 'dockerhub-credentials'
+    label 'docker'
   }
   stages {
     stage('Create Network') {
       steps {
         echo 'Creating user-defined bridge network...'
         sh 'docker network create my_network'
-        }
       }
     }
     stage('Setup MySQL Container') {
@@ -29,6 +26,7 @@ pipeline {
       }
     }
     stage('Setup Nginx Container') {
+      steps {
         echo 'Mounting Nginx configuration file...'
         sh '''
           cat <<EOF > /tmp/wordpress.conf
@@ -39,17 +37,16 @@ pipeline {
             root /usr/share/nginx/html/wordpress;
             index index.php index.html index.htm;
 
-              try_files $uri $uri/ /index.php?$args;
-              try_files "$uri" "$uri/" /index.php?$args;
+            try_files $uri $uri/ /index.php?$args;
+            try_files "$uri" "$uri/" /index.php?$args;
 
-              include fastcgi_params;
-              fastcgi_pass wordpress:80;
-              fastcgi_index index.php;
-              fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
+            include fastcgi_params;
+            fastcgi_pass wordpress:80;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
               
-              location ~ /\\.ht {
-                deny all;
-              }
+            location ~ /\\.ht {
+              deny all;
             }
           }
           EOF
@@ -75,5 +72,6 @@ pipeline {
         body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
         mimeType: 'text/html'
       )
+    }
   }
 }
