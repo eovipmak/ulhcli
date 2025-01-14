@@ -2,15 +2,14 @@ pipeline {
   agent {
     docker {
       alwaysPull true
-    registryCredentialsId 'dockerhub-credentials'
-  }
-    registryCredentialsId 'dockerhub-credentials'
+      registryCredentialsId 'dockerhub-credentials'
   }
   stages {
     stage('Create Network') {
       steps {
         echo 'Creating user-defined bridge network...'
         sh 'docker network create my_network'
+        }
       }
     }
     stage('Setup MySQL Container') {
@@ -42,21 +41,20 @@ pipeline {
 
               try_files $uri $uri/ /index.php?$args;
               try_files "$uri" "$uri/" /index.php?$args;
-            }
 
               include fastcgi_params;
               fastcgi_pass wordpress:80;
               fastcgi_index index.php;
               fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
-            }
-
-            location ~ /\\.ht {
-              deny all;
+              
+              location ~ /\\.ht {
+                deny all;
+              }
             }
           }
           EOF
         '''
-        sh 'docker run --name nginx --network my_network -v wordpress_data:/usr/share/nginx/html -v /tmp/wordpress.conf:/etc/nginx/conf.d/wordpress.conf:ro -p 80:80 -d nginx:latest'
+        sh 'docker exec nginx sh -c "nginx -t && nginx -s reload"'
         sh 'docker exec nginx nginx -t && docker exec nginx nginx -s reload'
       }
     }
