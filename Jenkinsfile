@@ -6,7 +6,6 @@ pipeline {
     NETWORK_NAME = 'my_network'
     MYSQL_CONTAINER = 'mysql'
     WORDPRESS_CONTAINER = 'wordpress'
-    NGINX_CONTAINER = 'nginx'
   }
   stages {
     stage('Create Network') {
@@ -43,7 +42,7 @@ pipeline {
         script {
           try {
             sh """
-              docker run --name ${WORDPRESS_CONTAINER} --network ${NETWORK_NAME} -e WORDPRESS_DB_HOST=${MYSQL_CONTAINER}:3306 -e WORDPRESS_DB_USER=wpuser -e WORDPRESS_DB_PASSWORD=password -e WORDPRESS_DB_NAME=wordpress -v wordpress_data:/var/www/html -d wordpress:latest
+              docker run --name ${WORDPRESS_CONTAINER} --network ${NETWORK_NAME} -e WORDPRESS_DB_HOST=${MYSQL_CONTAINER}:3306 -e WORDPRESS_DB_USER=wpuser -e WORDPRESS_DB_PASSWORD=password -e WORDPRESS_DB_NAME=wordpress -v wordpress_data:/var/www/html -p 8080:80 -d wordpress:latest
             """
           } catch (Exception e) {
             echo "WordPress container setup failed: ${e}"
@@ -52,41 +51,45 @@ pipeline {
         }
       }
     }
-    stage('Setup Nginx Container') {
+    stage('Setup Nginx') {
       steps {
-      echo 'Setting up Nginx container...'
-      script {
-        try {
-        sh '''
-          cat <<EOF > /tmp/wordpress.conf
-          server {
-          listen 80;
-          server_name localhost;
+        echo 'Setting up Nginx...'
+        script {
+          try {
+            sh '''
+              if ! command -v nginx &> /dev/null
+              then
+                echo "Nginx not found, installing..."
+                apt-get update
+                apt-get install -y nginx
+              fi
+            '''
+            sh '''
+              cat <<EOF > /etc/nginx/conf.d/wordpress.conf
+              server {
+                listen 80;
+                server_name localhost;
 
-          root /usr/share/nginx/html/wordpress;
-          index index.php index.html index.htm;
+                location / {
+                  proxy_pass http://${WORDPRESS_CONTAINER}:8080;
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+                }
 
-          try_files \$uri \$uri/ /index.php?\$args;
-          try_files "\$uri" "\$uri/" /index.php?\$args;
-
-          include fastcgi_params;
-          fastcgi_pass wordpress:80;
-          fastcgi_index index.php;
-          fastcgi_param SCRIPT_FILENAME '\$document_root\$fastcgi_script_name';
-            
-          location ~ /\\.ht {
-            deny all;
+                location ~ /\\.ht {
+                  deny all;
+                }
+              }
+              EOF
+            '''
+            sh "nginx -t && nginx -s reload"
+          } catch (Exception e) {
+            echo "Nginx setup failed: ${e}"
+            error "Stopping pipeline due to Nginx setup failure."
           }
-          }
-          EOF
-        '''
-        sh "docker run --name ${NGINX_CONTAINER} --network ${NETWORK_NAME} -v /tmp/wordpress.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:latest"
-        sh "sleep 10 && docker exec ${NGINX_CONTAINER} nginx -t && docker exec ${NGINX_CONTAINER} nginx -s reload"
-        } catch (Exception e) {
-        echo "Nginx container setup failed: ${e}"
-        error "Stopping pipeline due to Nginx container setup failure."
         }
-      }
       }
     }
   }
