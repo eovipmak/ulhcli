@@ -81,7 +81,7 @@ pipeline {
               EOF
             '''
             sh "docker run --name ${NGINX_CONTAINER} --network ${NETWORK_NAME} -v /tmp/wordpress.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:latest"
-            sh "docker exec ${NGINX_CONTAINER} nginx -t && docker exec ${NGINX_CONTAINER} nginx -s reload"
+            sh "sleep 10 && docker exec ${NGINX_CONTAINER} nginx -t && docker exec ${NGINX_CONTAINER} nginx -s reload"
           } catch (Exception e) {
             echo "Nginx container setup failed: ${e}"
             error "Stopping pipeline due to Nginx container setup failure."
