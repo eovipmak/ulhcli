@@ -14,6 +14,6 @@ jobs:
           distribution: temurin
           java-version: 21
           check-latest: true
-      - run: java HelloWorldApp.java
+      - run: java -cp java HelloWorldApp
       - name: Success Notify
         run: echo "This job's status is ${{ job.status }}."
