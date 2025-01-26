@@ -1,25 +1,33 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing
-on: [push]
+name: Deploy Python Website
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  Explore-GitHub-Actions:
+  deploy:
     runs-on: self-hosted
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
-        
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          distribution: temurin
-          java-version: 21
-          check-latest: true
+          python-version: '3.11'
 
-      - name: Compile Java Code
-        run: javac HelloWorldApp.java
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Run Java Application
-        run: java HelloWorldApp
-        
-      - name: Success Notify
-        run: echo "This job's status is ${{ job.status }}."
+      - name: Run tests
+        run: python tests.py
+
+      - name: Deploy (Run Flask App)
+        run: |
+          nohup python app.py &
+          sleep 5
+          curl -I http://127.0.0.1:5000 | grep "200 OK"
