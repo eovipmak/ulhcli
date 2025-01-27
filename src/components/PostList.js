@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function PostList({ posts }) {
   return (
@@ -21,5 +22,16 @@ function PostList({ posts }) {
     </div>
   );
 }
+
+PostList.propTypes = {
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
 
 export default PostList; 

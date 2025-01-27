@@ -7,7 +7,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests --watchAll=false",
     "dev": "concurrently \"npm start\" \"npm test\"",
-    "pm2-start": "pm2 start server.js --name my-app"
+    "pm2-start": "pm2 start server.js --name my-app",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -19,6 +21,8 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/jest-dom": "^5.16.5",
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^2.0.0"
   }
 } 

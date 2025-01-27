@@ -12,7 +12,13 @@ function Register() {
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Registered successfully');
     } catch (error) {
-      alert(error.message);
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Email is already in use');
+      } else if (error.code === 'auth/weak-password') {
+        alert('Password is too weak');
+      } else {
+        alert(error.message);
+      }
     }
   };
 
