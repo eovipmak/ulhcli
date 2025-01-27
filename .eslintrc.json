@@ -19,6 +19,10 @@
     "react"
   ],
   "rules": {
-    // Thêm các quy tắc tùy chỉnh nếu cần
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 } 
