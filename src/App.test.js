@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import App from './App';
 
-test('renders welcome message', () => {
+test('renders blog post app title', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Welcome to My React App/i);
-  expect(linkElement).toBeInTheDocument();
+  const titleElement = screen.getByText(/Blog Post App/i);
+  expect(titleElement).toBeInTheDocument();
 }); 
