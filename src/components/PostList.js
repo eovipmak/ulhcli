@@ -11,6 +11,8 @@ function PostList({ posts }) {
           {posts.map((post, index) => (
             <li key={index}>
               <h3>{post.title}</h3>
+              <p><strong>Category:</strong> {post.category}</p>
+              <p><strong>Description:</strong> {post.description}</p>
               <p>{post.content}</p>
             </li>
           ))}
