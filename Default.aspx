@@ -2,12 +2,13 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Hello Vinahost</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Xin chào Vinahost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Be+Vietnam+Pro:wght@700&display=swap" rel="stylesheet">
     <style type="text/css">
         body {
-            font-family: 'Montserrat', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Be Vietnam Pro', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -54,7 +55,7 @@
 <body>
     <form id="form1" runat="server">
         <div class="container">
-            <h1 class="greeting">Hello Vinahost</h1>
+            <h1 class="greeting">Xin chào Vinahost</h1>
         </div>
     </form>
 </body>
