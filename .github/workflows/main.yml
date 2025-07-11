@@ -28,13 +28,13 @@ jobs:
           EOF
 
       - name: Check Config File
-        run: ls unlighthouse.config.ts
+        run: ls -d "$PWD/unlighthouse.config.ts"
 
       - name: Check and build 
-        run: unlighthouse-ci --site ${{ secrets.SITE }} --config-file ./unlighthouse.config.ts --build-static
+        run: unlighthouse-ci --config-file ./unlighthouse.config.ts --enable-i18n-pages --build-static
 
       - name: Deploy
-        run: netlify deploy --dir=.unlighthouse --prod --message="New Release Deploy from GitHub Actions"
+        run: netlify deploy --dir=.unlighthouse --prod --message="Daily Performance Report"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
