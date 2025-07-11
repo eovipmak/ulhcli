@@ -22,7 +22,7 @@ jobs:
           export default {
           site: '${{ secrets.SITE }}',
           scanner: {
-            maxRoutes: '10000'
+            maxRoutes: '3000'
           }
           }
           EOF
