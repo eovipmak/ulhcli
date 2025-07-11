@@ -22,7 +22,18 @@ jobs:
           export default {
           site: '${{ secrets.SITE }}',
           scanner: {
-            maxRoutes: '3000'
+            maxRoutes: '3000',
+            sitemap: [
+          'post-sitemap.xml',
+          'page-sitemap.xml'
+          ],
+          exclude: [
+          '/en/*',
+          '/ko/*',
+          '/ja/*',
+          '/zh-hans/*',
+          '/khuyen-mai-*'
+          ]
           }
           }
           EOF
