@@ -3,7 +3,7 @@ name: Daily LightHouse Check
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 22 * * *'
+    - cron: '0 17 * * *'
 
 jobs:
   demo:
@@ -15,6 +15,17 @@ jobs:
 
       - name: Install Dependencies
         run: npm install -g @unlighthouse/cli puppeteer netlify-cli
+
+      - name: Generate Config File
+        run: |
+          cat <<EOF > unlighthouse.config.ts
+          export default {
+          site: '${{ secrets.SITE }}',
+          scanner: {
+            maxRoutes: '10000'
+          }
+          }
+          EOF
 
       - name: Check and build 
         run: unlighthouse-ci --site ${{ secrets.SITE }} --build-static
