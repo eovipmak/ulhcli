@@ -38,9 +38,6 @@ jobs:
           }
           EOF
 
-      - name: Check Config File
-        run: ls -d "$PWD/unlighthouse.config.ts"
-
       - name: Check and build 
         run: unlighthouse-ci --config-file ./unlighthouse.config.ts --enable-i18n-pages --build-static
 
