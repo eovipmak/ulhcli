@@ -1,4 +1,4 @@
-name: Daily LightHouse Check
+name: Daily Check (Desktop)
 
 on:
   workflow_dispatch:
@@ -22,6 +22,7 @@ jobs:
           export default {
           site: '${{ secrets.SITE }}',
           scanner: {
+            device: 'desktop',
             maxRoutes: '3000',
             sitemap: [
           'post-sitemap.xml',
@@ -39,10 +40,10 @@ jobs:
           EOF
 
       - name: Check and build 
-        run: unlighthouse-ci --config-file ./unlighthouse.config.ts --enable-i18n-pages --build-static
+        run: unlighthouse-ci --config-file ./unlighthouse.config.ts --disable-i18n-pages --build-static
 
       - name: Deploy
-        run: netlify deploy --dir=.unlighthouse --prod --message="Daily Performance Report"
+        run: netlify deploy --dir=.unlighthouse --prod --message="Daily Performance Report (Desktop)"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_DESKTOP_ID }}
