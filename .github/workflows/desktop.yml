@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Dependencies
-        run: npm install -g @unlighthouse/cli puppeteer netlify-cli
+        run: npm install -g @unlighthouse/cli@0.17.0 puppeteer netlify-cli
 
       - name: Generate Config File
         run: |
@@ -25,7 +25,6 @@ jobs:
             device: 'desktop',
             dynamicSampling: false,
             maxRoutes: '3000',
-            robotsTxt: false,
             sitemap: [
             '/post-sitemap.xml',
             '/page-sitemap.xml',
