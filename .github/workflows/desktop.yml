@@ -24,7 +24,6 @@ jobs:
           scanner: {
             device: 'desktop',
             dynamicSampling: false,
-            robotsTxt: false,
             maxRoutes: '3000',
             sitemap: [
             '/post-sitemap.xml',
