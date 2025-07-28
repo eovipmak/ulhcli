@@ -28,7 +28,7 @@ jobs:
               maxRoutes: '3000',
               sitemap: [
                 '/post-sitemap.xml',
-                '/page-sitemap.xml',
+                '/page-sitemap.xml'
               ],
               exclude: [
                 '/en/*',
