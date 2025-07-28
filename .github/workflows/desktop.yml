@@ -23,7 +23,6 @@ jobs:
           site: '${{ secrets.SITE }}',
           scanner: {
             device: 'desktop',
-            crawler: false,
             dynamicSampling: false,
             robotsTxt: false,
             maxRoutes: '3000',
