@@ -25,7 +25,6 @@ jobs:
             device: 'desktop',
             dynamicSampling: false,
             maxRoutes: '3000',
-            crawler: false,
             robotsTxt: false,
             sitemap: [
             '/post-sitemap.xml',
@@ -37,7 +36,8 @@ jobs:
           '/ja/*',
           '/zh-hans/*',
           '/khuyen-mai-*'
-          ]
+          ],
+          crawler: false,
           }
           }
           EOF
