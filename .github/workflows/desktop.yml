@@ -23,10 +23,13 @@ jobs:
           site: '${{ secrets.SITE }}',
           scanner: {
             device: 'desktop',
+            crawler: false,
+            dynamicSampling: false,
+            robotsTxt: false,
             maxRoutes: '3000',
             sitemap: [
-          'post-sitemap.xml',
-          'page-sitemap.xml'
+            '/post-sitemap.xml',
+            '/page-sitemap.xml'
           ],
           exclude: [
           '/en/*',
