@@ -37,7 +37,6 @@ jobs:
           '/zh-hans/*',
           '/khuyen-mai-*'
           ],
-          crawler: false,
           }
           }
           EOF
