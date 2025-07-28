@@ -13,38 +13,47 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install Dependencies
-        run: npm install -g @unlighthouse/cli@0.17.0 puppeteer netlify-cli
+        run: |
+          npm install @unlighthouse/cli@0.17.0 puppeteer netlify-cli --save-dev
 
       - name: Generate Config File
         run: |
           cat <<EOF > unlighthouse.config.ts
           export default {
-          site: '${{ secrets.SITE }}',
-          scanner: {
-            device: 'desktop',
-            dynamicSampling: false,
-            maxRoutes: '3000',
-            sitemap: [
-            '/post-sitemap.xml',
-            '/page-sitemap.xml',
-          ],
-          exclude: [
-          '/en/*',
-          '/ko/*',
-          '/ja/*',
-          '/zh-hans/*',
-          '/khuyen-mai-*'
-          ],
-          }
+            site: '${{ secrets.SITE }}',
+            scanner: {
+              device: 'desktop',
+              dynamicSampling: false,
+              maxRoutes: '3000',
+              sitemap: [
+                '/post-sitemap.xml',
+                '/page-sitemap.xml',
+              ],
+              exclude: [
+                '/en/*',
+                '/ko/*',
+                '/ja/*',
+                '/zh-hans/*',
+                '/khuyen-mai-*'
+              ],
+            }
           }
           EOF
 
-      - name: Check and build 
-        run: unlighthouse-ci --config-file ./unlighthouse.config.ts --disable-i18n-pages --build-static
+      - name: Check and Build
+        run: npx unlighthouse-ci --config-file ./unlighthouse.config.ts --disable-i18n-pages --build-static
 
       - name: Deploy
-        run: netlify deploy --dir=.unlighthouse --prod --message="Daily Performance Report (Desktop)"
+        run: npx netlify deploy --dir=.unlighthouse --prod --message="Daily Performance Report (Desktop)"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_DESKTOP_ID }}
