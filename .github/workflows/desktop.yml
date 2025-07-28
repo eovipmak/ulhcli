@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install @unlighthouse/cli@0.17.0 puppeteer netlify-cli --save-dev
+          npm install @unlighthouse/cli@0.17.0 puppeteer netlify-cli sisteransi --save-dev
 
       - name: Generate Config File
         run: |
