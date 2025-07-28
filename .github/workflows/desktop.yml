@@ -30,6 +30,7 @@ jobs:
             '/post-sitemap.xml',
             '/page-sitemap.xml'
           ],
+          crawler: false,
           exclude: [
           '/en/*',
           '/ko/*',
