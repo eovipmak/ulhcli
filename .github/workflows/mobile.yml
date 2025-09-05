@@ -29,6 +29,7 @@ jobs:
               maxRoutes: '3000',
               maxConcurrency: 1,
               samples: 3,
+              robotsTxt: false,
               urls: [
                 '/',
                 '/alibaba-cloud-anti-ddos',
