@@ -29,7 +29,10 @@ jobs:
               maxRoutes: '3000',
               maxConcurrency: 1,
               samples: 3,
-              urls: [
+              sitemap: false,
+              robotsTxt: false,
+              crawler: false,
+              include: [
                 '/',
                 '/alibaba-cloud-anti-ddos',
                 '/alibaba-cloud-cdn',
@@ -143,7 +146,6 @@ jobs:
                 '/windows-hosting',
                 '/wordpress-hosting',
               ],
-              crawler: false,
             }
           }
           EOF
