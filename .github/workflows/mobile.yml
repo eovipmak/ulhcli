@@ -15,7 +15,15 @@ jobs:
           
       - name: Install Dependencies
         run: |
-          npm install @unlighthouse/cli puppeteer netlify-cli
+          - name: Setup Node.js
+            uses: actions/setup-node@v3
+            with:
+              node-version: '22'
+              cache: 'npm'
+              
+          - name: Install Dependencies
+            run: |
+              npm install @unlighthouse/cli puppeteer netlify-cli
 
       - name: Generate Config File
         run: |
@@ -42,7 +50,7 @@ jobs:
         run: |
           curl -X POST \
             -H "Content-Type: text/csv" \
-            --data-binary "@.unlighthouse/reports/ci-result.csv" \
+            --data-binary "@.unlighthouse/ci-result.csv" \
             ${{ secrets.HOOK }}
 
       - name: Deploy
