@@ -49,7 +49,7 @@ jobs:
           curl -X POST \
             -H "Content-Type: text/csv" \
             --data-binary "@.unlighthouse/ci-result.csv" \
-            ${{ secrets.HOOK }}
+            ${{ secrets.HOOK-M }}
 
       - name: Deploy
         run: npx netlify deploy --dir=.unlighthouse --prod --message="Daily Performance Report (Mobile)"
