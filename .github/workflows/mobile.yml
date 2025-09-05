@@ -29,7 +29,6 @@ jobs:
               maxRoutes: '3000',
               maxConcurrency: 1,
               samples: 3,
-              crawler: false,
               sitemap: false,
               robotsTxt: false,
               urls: [
@@ -146,6 +145,7 @@ jobs:
                 '/windows-hosting',
                 '/wordpress-hosting',
               ],
+              crawler: false,
             }
           }
           EOF
