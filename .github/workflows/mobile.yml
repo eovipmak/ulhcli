@@ -15,7 +15,7 @@ jobs:
           
       - name: Install Dependencies
         run: |
-          npm install @unlighthouse/cli@0.17.0 puppeteer netlify-cli sisteransi --save-dev
+          npm install @unlighthouse/cli puppeteer netlify-cli sisteransi --save-dev
 
       - name: Generate Config File
         run: |
@@ -24,10 +24,12 @@ jobs:
             site: '${{ secrets.SITE }}',
             scanner: {
               device: 'mobile',
+              throttle: true,
               dynamicSampling: false,
               maxRoutes: '3000',
+              maxConcurrency: 1,
+              samples: 3,
               sitemap: [
-                '/post-sitemap.xml',
                 '/page-sitemap.xml'
               ],
               exclude: [
