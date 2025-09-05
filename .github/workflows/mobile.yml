@@ -42,7 +42,7 @@ jobs:
         run: |
           curl -X POST \
             -H "Content-Type: text/csv" \
-            --data-binary "@reports/ci-result.csv" \
+            --data-binary "@.unlighthouse/reports/ci-result.csv" \
             ${{ secrets.HOOK }}
 
       - name: Deploy
