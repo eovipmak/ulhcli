@@ -13,17 +13,15 @@ jobs:
         with:
           fetch-depth: 0
           
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
       - name: Install Dependencies
         run: |
-          - name: Setup Node.js
-            uses: actions/setup-node@v3
-            with:
-              node-version: '22'
-              cache: 'npm'
-          
-          - name: Install Dependencies
-            run: |
-              npm install @unlighthouse/cli puppeteer netlify-cli
+          npm install @unlighthouse/cli puppeteer netlify-cli
 
       - name: Generate Config File
         run: |
