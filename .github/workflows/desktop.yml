@@ -29,7 +29,7 @@ jobs:
           export default {
             site: '${{ secrets.SITE }}',
             scanner: {
-              device: 'mobile',
+              device: 'desktop',
               throttle: false,
               dynamicSampling: false,
               maxConcurrency: 2,
@@ -56,3 +56,4 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_DESKTOP_ID }}
+
